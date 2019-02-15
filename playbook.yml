@@ -1,0 +1,10 @@
+---
+- hosts: master 
+  become: true
+  roles:
+  - master 
+
+- hosts: manager
+  become: true
+  roles: 
+  - manager 
