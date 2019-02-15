@@ -43,8 +43,18 @@
 
 - name: Copies override.conf for enabling Docker API
   copy:
-    src: ./override.conf
+    src: ./files/override.conf
     dest: /etc/systemd/system/docker.service.d/override.conf
+
+- name: Copies the scaleio client to /tmp
+  copy:
+    src: ./files/EMC-ScaleIO-sdc-2.6-10000.123.el7.x86_64.rpm
+    dest: /tmp/EMC-ScaleIO-sdc-2.6-10000.123.el7.x86_64.rpm
+
+- name: Install SDC
+  yum:
+    name: /tmp/EMC-ScaleIO-sdc-2.6-10000.123.el7.x86_64.rpm
+    state: present
 
 - name: Adding user root
   user: name=root
