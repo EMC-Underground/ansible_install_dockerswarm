@@ -1,4 +1,9 @@
 ---
+- hosts: all 
+  become: true
+  roles:
+  - all
+
 - hosts: master 
   become: true
   roles:
