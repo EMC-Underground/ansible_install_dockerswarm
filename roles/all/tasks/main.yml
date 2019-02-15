@@ -56,7 +56,7 @@
     name: /tmp/EMC-ScaleIO-sdc-2.6-10000.123.el7.x86_64.rpm
     state: present
   environment:
-    MDM_IP: 10.237.198.171,10.237.198.172
+    MDM_IP: 192.168.10.201,192.168.11.201,192.168.10.202,192.168.11.202
 
 - name: Adding user root
   user: name=root
