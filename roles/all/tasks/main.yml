@@ -46,6 +46,13 @@
     src: ./files/override.conf
     dest: /etc/systemd/system/docker.service.d/override.conf
 
+- name: "Make sure the service starts at boot and is currently started"
+  systemd:
+    name: docker
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+
 - name: Copies the scaleio client to /tmp
   copy:
     src: ./files/EMC-ScaleIO-sdc-2.6-10000.123.el7.x86_64.rpm
@@ -62,9 +69,11 @@
   user: name=root
         group=docker
 
-- name: "Make sure the service starts at boot and is currently started"
-  systemd:
-    name: docker
-    daemon_reload: yes
-    state: restarted
-    enabled: yes
+- name: "Find out if rexray is already installed"
+  shell: docker plugin ls | grep rexray
+  register: REXRAY
+  failed_when: "REXRAY.rc == 2"
+
+- name: "Install RexRay if it is not already installed"
+  shell: echo "y" | docker plugin install rexray/scaleio SCALEIO_ENDPOINT=https://10.237.198.170/api SCALEIO_USERNAME=admin SCALEIO_PASSWORD=Password#1 SCALEIO_SYSTEMID=07e2bf1f7667b4e9 SCALEIO_PROTECTIONDOMAINNAME=pd1 SCALEIO_STORAGEPOOLNAME=sp1 REXRAY_PREEMPT=true REXRAY_LOGLEVEL=debug
+  when: REXRAY.rc == 1
