@@ -1,15 +1,18 @@
 ---
-- hosts: all 
+- hosts: all
   become: true
   roles:
   - all
+  - role: ericsysmin.chrony
+    chrony_config_server:
+      - mickey.lss.emc.com
 
-- hosts: master 
+- hosts: master
   become: true
   roles:
-  - master 
+  - master
 
 - hosts: manager
   become: true
-  roles: 
-  - manager 
+  roles:
+  - manager

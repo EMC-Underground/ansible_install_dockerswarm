@@ -12,7 +12,11 @@
   - yum-utils
   - device-mapper-persistent-data
   - lvm2
-  - ntp
+
+- name: set timezone to UTC
+  timezone:
+    name: UTC
+    hwclock: UTC
 
 - name: "Disable FireWall Service"
   systemd:
