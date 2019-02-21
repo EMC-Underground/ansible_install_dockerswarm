@@ -24,12 +24,6 @@
     state: stopped
     enabled: no
 
-- name: "Start and Enable NTPD"
-  systemd:
-    name: ntpd
-    state: started
-    enabled: yes
-
 - name: Add Docker repo
   get_url:
     url: https://download.docker.com/linux/centos/docker-ce.repo
