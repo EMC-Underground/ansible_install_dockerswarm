@@ -1,0 +1,12 @@
+---
+# in the above example, this would be vars/external_vars.yml
+ntp_server: mickey.lss.emc.com
+vxflex_gateway_ip: 10.237.198.170
+vxflex_gateway_username: admin
+vxflex_gateway_pw: Password#1
+vxflex_version: "2.6-10000.123"
+vxflex_system_id: 07e2bf1f7667b4e9
+vxflex_storage_pool_name: sp1
+vxflex_protection_domain_name: pd1
+vxflex_mdm_ip: "192.168.10.201,192.168.11.201"
+rexray_log_level: debug

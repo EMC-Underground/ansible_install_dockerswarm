@@ -1,6 +1,8 @@
 ---
 - hosts: all
   become: true
+  vars_files:
+    - ./vars.yml
   roles:
   - all
   - role: ericsysmin.chrony

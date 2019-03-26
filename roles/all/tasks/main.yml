@@ -61,7 +61,7 @@
     name: /tmp/EMC-ScaleIO-sdc-{{vxflex_version}}.el7.x86_64.rpm
     state: present
   environment:
-    MDM_IP: {{vxflex_mdm_ip}}
+    MDM_IP: "{{ vxflex_mdm_ip }}"
 
 - name: Adding user root
   user: name=root
@@ -73,5 +73,5 @@
   failed_when: "REXRAY.rc == 2"
 
 - name: "Install RexRay if it is not already installed"
-  shell: echo "y" | docker plugin install rexray/scaleio SCALEIO_ENDPOINT=https://{{vxflex_gateway_ip}}/api SCALEIO_USERNAME={{vxflex_gateway_username}} SCALEIO_PASSWORD={{vxflex_gateway_pw}} SCALEIO_SYSTEMNAME={{vxflex_system_name}} SCALEIO_PROTECTIONDOMAINNAME={{vxflex_protection_domain_name}} SCALEIO_STORAGEPOOLNAME={{vxflex_storage_pool_name}} REXRAY_PREEMPT=true REXRAY_LOGLEVEL={{rexray_log_level}}
+  shell: echo "y" | docker plugin install rexray/scaleio SCALEIO_ENDPOINT=https://{{ vxflex_gateway_ip}}/api SCALEIO_USERNAME={{ vxflex_gateway_username }} SCALEIO_PASSWORD={{ vxflex_gateway_pw }} SCALEIO_SYSTEMID={{ vxflex_system_id }} SCALEIO_PROTECTIONDOMAINNAME={{ vxflex_protection_domain_name }} SCALEIO_STORAGEPOOLNAME={{vxflex_storage_pool_name}} REXRAY_PREEMPT=true REXRAY_LOGLEVEL={{rexray_log_level}}
   when: REXRAY.rc == 1

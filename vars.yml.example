@@ -5,7 +5,8 @@ vxflex_gateway_ip: <VXFLEX_IP>
 vxflex_gateway_username: <USERNAME>
 vxflex_gateway_pw: <PASSWORD>
 vxflex_version: "2.6-10000.123"
-vxflex_system_name: <VXFLEX_SYSTEM_NAME>
+vxflex_system_id: <VXFLEX_SYSTEM_ID>
 vxflex_storage_pool_name: <VXFLEX_STORAGE_POOL_NAME>
 vxflex_protection_domain_name: <VXFLEX_PD_NAME>
 vxflex_mdm_ip: "10.10.10.1,10.10.11.1"
+rexray_log_level: <debug>
