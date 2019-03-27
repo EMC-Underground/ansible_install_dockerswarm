@@ -16,5 +16,6 @@
     name:   "MASTER_TOKEN_HOLDER"
     token:  "{{ docker_id_number.stdout }}"
 
-- debug:
+- name: "Master Swarm IP"
+  debug:
     var: ansible_default_ipv4.address
