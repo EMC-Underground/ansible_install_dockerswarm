@@ -61,7 +61,7 @@
     name: /tmp/EMC-ScaleIO-sdc-{{vxflex_version}}.el7.x86_64.rpm
     state: present
   environment:
-    MDM_IP: "{{ vxflex_master_mdm_ip | join(',') }},{{ vxflex_secondary_mdm_ip | join(',')}}"
+    MDM_IP: "{{ vxflex_master_mdm_ip | join(',') }},{{ vxflex_standby_mdm_ip | join(',')}}"
 
 - name: Adding user root
   user: name=root
