@@ -26,4 +26,5 @@ vxflex_standby_mdm_ip:
 vxflex_tiebreaker_mdm_ip:
   - <TIEBREAKER_MDM_IP_1>
   - <TIEBREAKER_MDM_IP_2>
+vxflex_mdm_cidr: 10.10.0.0/8
 rexray_log_level: debug
