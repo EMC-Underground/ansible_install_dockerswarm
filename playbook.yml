@@ -7,7 +7,7 @@
   - all
   - role: ericsysmin.chrony
     chrony_config_server:
-      - mickey.lss.emc.com
+      - {{ ntp_server }}
 
 - hosts: master
   become: true
