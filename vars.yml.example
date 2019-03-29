@@ -4,6 +4,8 @@ ntp_server: <NTP_FQDN>
 vxflex_gateway_ip: <VXFLEX_IP>
 vxflex_gateway_username: <USERNAME>
 vxflex_gateway_pw: <PASSWORD>
+vxflex_gateway_http_port: <PORT_NUMBER> # 80 or 8080
+vxflex_gateway_https_port: <PORT_NUMBER> # 443 or 8443
 vxflex_version: "2.6-10000.123"
 vxflex_system_name: <NAME>
 vxflex_storage_pool_name: <STORAGE_POOL_NAME>
