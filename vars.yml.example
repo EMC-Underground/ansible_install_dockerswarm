@@ -5,7 +5,7 @@ vxflex_gateway_ip: <VXFLEX_IP>
 vxflex_gateway_username: <USERNAME>
 vxflex_gateway_pw: <PASSWORD>
 vxflex_version: "2.6-10000.123"
-vxflex_system_id: <id>
+vxflex_system_name: <NAME>
 vxflex_storage_pool_name: <STORAGE_POOL_NAME>
 vxflex_protection_domain_name: <VXFLEX_PD_NAME>
 vxflex_master_mdm_name: <MASTER_MDM_NAME>
