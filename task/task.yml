@@ -14,11 +14,12 @@ run:
   - |
     server_list=((server_list))
     array=($(echo "${server_list}" | tr ',' '\n'))
-    echo $array[@]
+    echo $array[1]
+    echo $array[2]
+    echo $array[3]
     echo [master] > hosts
     echo [manager] >> hosts
-    echo ${#array[@]}
-    for i in {1..${#array[@]}}
+    for i in {1..$count}
     do
         if [ $i -eq 1 ]
         then
