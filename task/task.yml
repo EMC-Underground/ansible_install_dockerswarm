@@ -8,13 +8,13 @@ image_resource:
     tag: "mini-alpine3"
 
 run:
-  path: sh
+  path: bash
   args:
-  - -exc
+  - -c
   - |
     server_list=((server_list))
     array=$(echo "${server_list}" | tr ',' '\n')
-    echo array[@]
+    echo $array[@]
     echo [master] > hosts
     echo [manager] >> hosts
     echo ${#array[@]}
