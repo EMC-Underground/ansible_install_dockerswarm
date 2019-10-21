@@ -13,7 +13,7 @@ run:
   - -exc
   - |
     server_list=((server_list))
-    array=($(echo "${server_list}" | tr ',' '\n'))
+    array=$(echo "${server_list}" | tr ',' '\n')
     echo [master] > hosts
     echo [manager] >> hosts
     for i in {1..${#array[@]}}
