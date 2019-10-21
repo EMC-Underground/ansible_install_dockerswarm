@@ -14,7 +14,7 @@ run:
   - |
     IFS=', ' read -r -a array <<< "((server_list))"
     echo '[master]
-[manager]' > hosts
+    [manager]' > hosts
     sed -i '/\[master\]/a ${array[0]}' hosts
     cat hosts
     echo ansible-playbook playbook.yml --extra-vars '{"ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name)) -k ((password))
