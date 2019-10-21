@@ -27,4 +27,4 @@ run:
         fi
     done
     cat hosts
-    echo ansible-playbook playbook.yml -i hosts --extra-vars '{"ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name)) -k ((password))
+    ansible-playbook playbook.yml -i hosts --extra-vars '{"ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name)) -k ((password))
