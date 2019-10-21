@@ -13,7 +13,7 @@ run:
   - -c
   - |
     server_list=((server_list))
-    array=$(echo "${server_list}" | tr ',' '\n')
+    array=($(echo "${server_list}" | tr ',' '\n'))
     echo $array[@]
     echo [master] > hosts
     echo [manager] >> hosts
