@@ -14,14 +14,9 @@ run:
   - |
     server_list=((server_list))
     array=($(echo "${server_list}" | tr ',' '\n'))
-    echo ${array[1]}
-    echo ${array[2]}
-    echo ${array[3]}
-    echo ${array[0]}
     echo [master] > hosts
     echo [manager] >> hosts
-    count=${#array[@]}-1
-    echo $count
+    count=`expr ${#array[@]} - 1`
     for i in $(seq 0 $count)
     do
         if [ $i -eq 0 ]
