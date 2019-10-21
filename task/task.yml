@@ -5,6 +5,7 @@ image_resource:
   type: docker-image
   source:
     repository: williamyeh/ansible
+    tag: ubuntu18.04
 
 run:
   path: bash
