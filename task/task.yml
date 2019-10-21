@@ -17,8 +17,10 @@ run:
     echo ${array[1]}
     echo ${array[2]}
     echo ${array[3]}
+    echo ${array[0]}
     echo [master] > hosts
     echo [manager] >> hosts
+    count=${#array[@]}
     for i in {1..$count}
     do
         if [ $i -eq 1 ]
