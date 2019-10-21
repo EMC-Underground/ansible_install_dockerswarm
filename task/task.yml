@@ -21,13 +21,14 @@ run:
     echo [master] > hosts
     echo [manager] >> hosts
     count=${#array[@]}
-    for i in {1..$count}
+    echo $count
+    for i in {0..${count}}
     do
-        if [ $i -eq 1 ]
+        if [ $i -eq 0 ]
         then
-            sed -i "/\[master\]/a $array[1]" hosts
+            sed -i "/\[master\]/a ${array[0]}" hosts
         fi
-        sed -i "/\[manager\]/a $array[$i]" hosts
+        sed -i "/\[manager\]/a ${array[$i]}" hosts
     done
     cat hosts
     echo ansible-playbook playbook.yml -i hosts --extra-vars '{"ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name)) -k ((password))
