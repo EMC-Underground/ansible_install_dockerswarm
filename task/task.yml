@@ -12,9 +12,16 @@ run:
   args:
   - -exc
   - |
-    IFS=', ' read -r -a array <<< "((server_list))"
-    echo '[master]
-    [manager]' > hosts
-    sed -i '/\[master\]/a ${array[0]}' hosts
+    array=($(echo "((server_list))" | tr ',' '\n'))
+    echo [master] > hosts
+    echo [manager] >> hosts
+    for i in {1..${#array[@]}}
+    do
+        if [ $i -eq 1 ]
+        then
+            sed -i "/\[master\]/a $array[1]" hosts
+        fi
+        sed -i "/\[manager\]/a $array[$i]" hosts
+    done
     cat hosts
-    echo ansible-playbook playbook.yml --extra-vars '{"ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name)) -k ((password))
+    echo ansible-playbook playbook.yml -i hosts --extra-vars '{"ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name)) -k ((password))
