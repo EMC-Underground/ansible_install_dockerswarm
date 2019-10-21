@@ -14,9 +14,9 @@ run:
   - |
     server_list=((server_list))
     array=($(echo "${server_list}" | tr ',' '\n'))
-    echo $array[1]
-    echo $array[2]
-    echo $array[3]
+    echo ${array[1]}
+    echo ${array[2]}
+    echo ${array[3]}
     echo [master] > hosts
     echo [manager] >> hosts
     for i in {1..$count}
