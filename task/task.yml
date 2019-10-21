@@ -20,9 +20,9 @@ run:
     echo ${array[0]}
     echo [master] > hosts
     echo [manager] >> hosts
-    count=${#array[@]}
+    count=${#array[@]}-1
     echo $count
-    for i in {0..${count}}
+    for i in $(seq 0 $count)
     do
         if [ $i -eq 0 ]
         then
