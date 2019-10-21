@@ -22,8 +22,9 @@ run:
         if [ $i -eq 0 ]
         then
             sed -i "/\[master\]/a ${array[0]}" hosts
+        else
+            sed -i "/\[manager\]/a ${array[$i]}" hosts
         fi
-        sed -i "/\[manager\]/a ${array[$i]}" hosts
     done
     cat hosts
     echo ansible-playbook playbook.yml -i hosts --extra-vars '{"ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name)) -k ((password))
