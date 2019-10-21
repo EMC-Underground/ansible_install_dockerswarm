@@ -12,7 +12,8 @@ run:
   args:
   - -exc
   - |
-    array=($(echo "((server_list))" | tr ',' '\n'))
+    server_list=((server_list))
+    array=($(echo "${server_list}" | tr ',' '\n'))
     echo [master] > hosts
     echo [manager] >> hosts
     for i in {1..${#array[@]}}
