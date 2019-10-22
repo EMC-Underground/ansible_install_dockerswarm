@@ -1,5 +1,5 @@
 - name: "See if node is already in a swarm"
-  shell: "docker info | grep Swarm | sed 's/Swarm: //g'"
+  shell: "docker info | grep Swarm | sed 's/Swarm: //g' | tr -d '[:space:]'"
   register: swarm_state
 
 - name: "Join the Swarm Cluster if needed"
