@@ -27,8 +27,10 @@ run:
         if [ $i -eq 0 ]
         then
             sed -i "/\[master\]/a ${array[0]}" hosts
+            ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" ((user_name))@${array[$i]}
         else
             sed -i "/\[manager\]/a ${array[$i]}" hosts
+            ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" ((user_name))@${array[$i]}
         fi
     done
     cat hosts
