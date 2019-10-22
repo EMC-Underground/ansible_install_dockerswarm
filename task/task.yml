@@ -19,7 +19,6 @@ run:
     ls -la
     server_list=((server_list))
     array=($(echo "${server_list}" | tr ',' '\n'))
-    echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no'" > hosts
     echo [master] >> hosts
     echo [manager] >> hosts
     count=`expr ${#array[@]} - 1`
@@ -33,6 +32,7 @@ run:
         fi
     done
     cat hosts
+    sed -i "/\[defaults\]/a host_key_checking = False" /etc/ansible/ansible.cfg
     mv vars.yml.example vars.yml
     ansible-galaxy install ericsysmin.chrony
     ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name))
