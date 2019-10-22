@@ -32,4 +32,5 @@ run:
         fi
     done
     cat hosts
+    mv vars.yml.example vars.yml
     ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name))
