@@ -48,7 +48,7 @@
   systemd:
     name: docker
     daemon_reload: yes
-    state: restarted
+    state: started
     enabled: yes
 
 - name: Copies the scaleio client to /tmp
