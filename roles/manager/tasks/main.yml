@@ -4,4 +4,4 @@
 
 - name: "Join the Swarm Cluster if needed"
   shell: "{{ hostvars['MASTER_TOKEN_HOLDER']['token'] }}"
-  when: swarm_state.stdout == "inactive"
+  when: swarm_state.stdout == " inactive"
