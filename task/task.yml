@@ -19,7 +19,8 @@ run:
     ls -la
     server_list=((server_list))
     array=($(echo "${server_list}" | tr ',' '\n'))
-    echo [master] > hosts
+    echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no'" > hosts
+    echo [master] >> hosts
     echo [manager] >> hosts
     count=`expr ${#array[@]} - 1`
     for i in $(seq 0 $count)
@@ -27,10 +28,8 @@ run:
         if [ $i -eq 0 ]
         then
             sed -i "/\[master\]/a ${array[0]}" hosts
-            ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" ((user_name))@${array[$i]}
         else
             sed -i "/\[manager\]/a ${array[$i]}" hosts
-            ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" ((user_name))@${array[$i]}
         fi
     done
     cat hosts
