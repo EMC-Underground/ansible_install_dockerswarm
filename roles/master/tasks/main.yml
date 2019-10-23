@@ -1,5 +1,5 @@
 - name: "See if node is already in a swarm"
-  shell: "docker info | grep Swarm | sed 's/Swarm: //g' | tr -d '[:space:]'"
+  shell: {{ "docker info | grep Swarm | sed 's/Swarm: //g' | tr -d '[:space:]'" | map('trim') }}
   register: swarm_state
   
 - name: "Swarm output"
@@ -9,7 +9,7 @@
 - name: "Initialize docker swarm instance and caputure ID"
   shell: "docker swarm init --advertise-addr {{ ansible_default_ipv4.address }}"
   register: docker_id
-  when: swarm_state.stdout == " inactive"
+  when: swarm_state.stdout == "inactive"
 
 - name: "Display docker swarm token ID"
   shell: "docker swarm join-token manager | awk '{if(NR>1)print}'"
