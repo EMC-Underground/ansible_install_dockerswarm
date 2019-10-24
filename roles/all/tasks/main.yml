@@ -3,14 +3,12 @@
   with_items:
   - git
   - vim
-  - libaio
   - numactl
   - sysfsutils
   - unzip
   - wget
   - net-tools
   - yum-utils
-  - device-mapper-persistent-data
   - lvm2
 
 - name: set timezone to UTC
