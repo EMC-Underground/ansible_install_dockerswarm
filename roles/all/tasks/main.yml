@@ -16,30 +16,30 @@
     name: UTC
     hwclock: UTC
 
-- name: "Disable FireWall Service"
+- name: "Disable Centos FireWall Service"
   systemd:
     name: firewalld
     state: stopped
     enabled: no
-    when: ansible_facts['distribution'] == "Centos"
+  when: ansible_facts['distribution'] == "Centos"
 
-- name: "Disable FireWall Service"
+- name: "Disable Ubuntu FireWall Service"
   systemd:
     name: ufw
     state: stopped
     enabled: no
-    when: ansible_facts['distribution'] == "Ubuntu"
+  when: ansible_facts['distribution'] == "Ubuntu"
     
 - name: Add Docker repo
   get_url:
     url: https://download.docker.com/linux/centos/docker-ce.repo
     dest: /etc/yum.repos.d/docer-ce.repo
-    when: ansible_facts['distribution'] == "Centos"
+  when: ansible_facts['distribution'] == "Centos"
     
 - apt_repository:
     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
     state: present
-    when: ansible_facts['distribution'] == "Ubuntu"
+  when: ansible_facts['distribution'] == "Ubuntu"
 
 - name: "Install Docker-CE"
   package:
