@@ -16,7 +16,6 @@ run:
   - -c
   - |
     cd swarm-repo
-    ls -la
     server_list=((server_list))
     array=($(echo "${server_list}" | tr ',' '\n'))
     echo [master] > hosts
