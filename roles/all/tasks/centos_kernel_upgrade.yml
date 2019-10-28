@@ -29,7 +29,8 @@
     - kernel
 
 - name: "Set Default Kernel to 5.x in grub"
-  command: sudo grub2-set-default 0
+  command: grub2-set-default 0
+  become: yes
   tags:
     - kernel
 

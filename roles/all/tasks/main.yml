@@ -12,6 +12,7 @@
   - lvm2
   tags:
     - swarm
+    - test
 
 - debug:
     var: ansible_kernel
@@ -20,7 +21,7 @@
 
 - name: "Upgrade Kernel to 5.x"
   include_tasks: centos_kernel_upgrade.yml
-  when: ansible_kernel is version('3','<=')
+  when: ansible_kernel is version('4.0','<')
   tags:
     - kernel
 
@@ -31,12 +32,15 @@
   tags:
     - swarm
 
+- debug:
+    var: ansible_facts['distribution']
+
 - name: "Disable Centos FireWall Service"
   systemd:
     name: firewalld
     state: stopped
     enabled: no
-  when: ansible_facts['distribution'] == "Centos"
+  when: ansible_facts['distribution'] == "CentOS"
   tags:
     - swarm
 
@@ -53,7 +57,7 @@
   get_url:
     url: https://download.docker.com/linux/centos/docker-ce.repo
     dest: /etc/yum.repos.d/docer-ce.repo
-  when: ansible_facts['distribution'] == "Centos"
+  when: ansible_facts['distribution'] == "CentOS"
   tags:
     - swarm
 
