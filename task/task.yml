@@ -15,8 +15,12 @@ run:
   args:
   - -c
   - |
+<<<<<<< HEAD
     cd swarm_repo
     ls -la
+=======
+    cd swarm-repo
+>>>>>>> cc6788c61f0e8ecf9c44f4b5bf667581c2cf7fbb
     server_list=((server_list))
     array=($(echo "${server_list}" | tr ',' '\n'))
     echo [master] > hosts

@@ -1,0 +1,41 @@
+---
+- name: "YUM update"
+  yum:
+    name: '*'
+    state: latest
+  tags:
+    - kernel
+
+- name: "Add gpg key for repo"
+  rpm_key:
+    state: present
+    key: https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+  tags:
+    - kernel
+
+- name: "Enable repo"
+  yum:
+    name: "https://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm"
+    state: present
+  tags:
+    - kernel
+
+- name: "Upgrade Kernel"
+  yum:
+    name: kernel-ml
+    enablerepo: elrepo-kernel
+    state: present
+  tags:
+    - kernel
+
+- name: "Set Default Kernel to 5.x in grub"
+  command: grub2-set-default 0
+  become: yes
+  tags:
+    - kernel
+
+- name: "Reboot server"
+  reboot:
+    reboot_timeout: 600
+  tags:
+    - kernel

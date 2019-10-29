@@ -3,53 +3,100 @@
   with_items:
   - git
   - vim
-  - libaio
   - numactl
   - sysfsutils
   - unzip
   - wget
   - net-tools
   - yum-utils
-  - device-mapper-persistent-data
   - lvm2
+  tags:
+    - swarm
+    - test
+
+- debug:
+    var: ansible_kernel
+  tags:
+    - kernel
+
+- name: "Upgrade Kernel to 5.x"
+  include_tasks: centos_kernel_upgrade.yml
+  when: ansible_kernel is version('4.0','<')
+  tags:
+    - kernel
 
 - name: set timezone to UTC
   timezone:
     name: UTC
     hwclock: UTC
+  tags:
+    - swarm
 
-- name: "Disable FireWall Service"
+- debug:
+    var: ansible_facts['distribution']
+
+- name: "Disable Centos FireWall Service"
   systemd:
     name: firewalld
     state: stopped
     enabled: no
+  when: ansible_facts['distribution'] == "CentOS"
+  tags:
+    - swarm
+
+- name: "Disable Ubuntu FireWall Service"
+  systemd:
+    name: ufw
+    state: stopped
+    enabled: no
+  when: ansible_facts['distribution'] == "Ubuntu"
+  tags:
+    - swarm
 
 - name: Add Docker repo
   get_url:
     url: https://download.docker.com/linux/centos/docker-ce.repo
     dest: /etc/yum.repos.d/docer-ce.repo
+  when: ansible_facts['distribution'] == "CentOS"
+  tags:
+    - swarm
+
+- apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+    state: present
+  when: ansible_facts['distribution'] == "Ubuntu"
+  tags:
+    - swarm
 
 - name: "Install Docker-CE"
   package:
     name: docker-ce
     state: present
+  tags:
+    - swarm
 
 - name: Creates directory
   file:
     path: /etc/systemd/system/docker.service.d
     state: directory
+  tags:
+    - swarm
 
 - name: Copies override.conf for enabling Docker API
   copy:
     src: ./files/override.conf
     dest: /etc/systemd/system/docker.service.d/override.conf
+  tags:
+    - swarm
 
 - name: "Make sure the service starts at boot and is currently started"
   systemd:
     name: docker
     daemon_reload: yes
-    state: restarted
+    state: started
     enabled: yes
+  tags:
+    - swarm
 
 - name: Copies the scaleio client to /tmp
   copy:

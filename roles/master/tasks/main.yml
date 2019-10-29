@@ -1,7 +1,11 @@
 - name: "See if node is already in a swarm"
-  shell: "docker info | grep Swarm | sed 's/Swarm: //g'"
+  shell: "docker info | grep Swarm | sed 's/Swarm: //g' | tr -d '[:space:]' | xargs"
   register: swarm_state
-
+  
+- name: "Swarm output"
+  debug:
+    var: swarm_state
+    
 - name: "Initialize docker swarm instance and caputure ID"
   shell: "docker swarm init --advertise-addr {{ ansible_default_ipv4.address }}"
   register: docker_id
