@@ -8,14 +8,14 @@ image_resource:
     tag: ubuntu18.04
 
 inputs:
-  - name: swarm-repo
+  - name: swarm_repo
 
 run:
   path: bash
   args:
   - -c
   - |
-    cd swarm-repo
+    cd swarm_repo
     server_list=((server_list))
     array=($(echo "${server_list}" | tr ',' '\n'))
     echo [master] > hosts
