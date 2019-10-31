@@ -58,6 +58,7 @@
   - 7946/tcp
   - 7946/udp
   - 4789/udp
+  - 8080/tcp
   - 50/tcp
   when: ansible_facts['distribution'] == "CentOS"
   tags:
