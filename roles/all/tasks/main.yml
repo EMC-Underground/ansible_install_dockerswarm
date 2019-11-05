@@ -60,6 +60,9 @@
   - 4789/udp
   - 8080/tcp
   - 50/tcp
+  - 2375/tcp
+  - 2376/tcp
+  - 22/tcp
   when: ansible_facts['distribution'] == "CentOS"
   tags:
     - firewall
