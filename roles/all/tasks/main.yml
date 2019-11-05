@@ -86,6 +86,13 @@
   tags:
     - swarm
 
+- name: Copies override.conf for enabling Docker API
+  copy:
+    src: ./files/override.conf
+    dest: /etc/systemd/system/docker.service.d/override.conf
+  tags:
+    - swarm
+    
 - name: Add Docker repo
   get_url:
     url: https://download.docker.com/linux/centos/docker-ce.repo
@@ -112,13 +119,6 @@
   file:
     path: /etc/systemd/system/docker.service.d
     state: directory
-  tags:
-    - swarm
-
-- name: Copies override.conf for enabling Docker API
-  copy:
-    src: ./files/override.conf
-    dest: /etc/systemd/system/docker.service.d/override.conf
   tags:
     - swarm
 
