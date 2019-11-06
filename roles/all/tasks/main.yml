@@ -80,14 +80,37 @@
   tags:
     - firewall
 
-- name: "Disable Ubuntu FireWall Service"
-  systemd:
-    name: ufw
-    state: stopped
-    enabled: no
+
+- name: "Allow Ports in Ubuntu for Docker Swarm"
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  with_items:
+  - 2377
+  - 7946
+  - 8080
+  - 50
+  - 2375
+  - 2376
+  - 22
   when: ansible_facts['distribution'] == "Ubuntu"
   tags:
-    - swarm
+    - firewall
+
+- name: "Allow Ports in Ubuntu for Docker Swarm"
+  ufw:
+    state: enabled
+    rule: allow
+    port: "{{ item }}"
+    proto: udp
+  with_items:
+  - 7946
+  - 4789
+  when: ansible_facts['distribution'] == "Ubuntu"
+  tags:
+    - firewall
+
 
 - name: Creates directory
   file:
