@@ -86,6 +86,7 @@
     rule: allow
     port: "{{ item }}"
     proto: tcp
+    state: enabled
   with_items:
   - 2377
   - 7946
@@ -110,7 +111,26 @@
   when: ansible_facts['distribution'] == "Ubuntu"
   tags:
     - firewall
+    
+- name: "Make sure the firewall service starts at boot and is currently started"
+  systemd:
+    name: firewalld
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+  when: ansible_facts['distribution'] == "CentOS"
+  tags:
+    - firewall
 
+- name: "Make sure the firewall service starts at boot and is currently started"
+  systemd:
+    name: ufw
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+  when: ansible_facts['distribution'] == "Ubuntu"
+  tags:
+    - firewall
 
 - name: Creates directory
   file:
