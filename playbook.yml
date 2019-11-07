@@ -5,9 +5,9 @@
     - ./vars.yml
   roles:
   - all
-  - role: ericsysmin.chrony
-    chrony_config_server:
-      - "{{ ntp_server }}"
+  #  - role: ericsysmin.chrony
+  #  chrony_config_server:
+    #    - "{{ ntp_server }}"
 
 - hosts: master
   become: true
