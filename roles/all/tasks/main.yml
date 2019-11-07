@@ -37,23 +37,44 @@
 - debug:
     var: ansible_facts['distribution']
 
-- name: "Check if UFW is installed"
-  command: command -v ufw
-  register: ufw_firewall_check
 
 - name: "Check if UFW is installed"
-  command: command -v firewalld
+  shell: command -v ufw
+  register: ufw_firewall_check
+  ignore_errors: yes
+  tags:
+    - firewall
+
+- debug:
+    var: ufw_firewall_check
+  tags:
+    - firewall
+
+- name: "Check if Firewalld is installed"
+  command: "command -v firewalld"
   register: firewalld_firewall_check
+  changed_when:
+    - firewalld_firewall_check.rc == 0
+  ignore_errors: yes
+  tags:
+    - firewall
 
 - name: "Check if IPTables is installed"
-  command: command -v iptables
+  command: "command -v iptables"
   register: iptables_firewall_check
+  ignore_errors: yes
+  tags:
+    - firewall
 
 - debug:
     var: ufw_firewall_check.rc
+  tags:
+    - firewall
 
 - debug:
     var: firewalld_firewall_check.rc
+  tags:
+    - firewall
 
 - name: "Enable Centos FireWalld Service"
   systemd:
@@ -62,7 +83,7 @@
     enabled: yes
   when:
     - ansible_facts['distribution'] == "CentOS"
-    - firewalld_firewall_check.rc == "0"
+    - firewalld_firewall_check.rc == 0
   tags:
     - swarm
     - firewall
@@ -74,18 +95,18 @@
     permanent: yes
     state: enabled
   with_items:
-  - 2377/tcp
-  - 7946/tcp
-  - 7946/udp
-  - 4789/udp
-  - 8080/tcp
-  - 50/tcp
-  - 2375/tcp
-  - 2376/tcp
-  - 22/tcp
+  - '2377/tcp'
+  - '7946/tcp'
+  - '7946/udp'
+  - '4789/udp'
+  - '8080/tcp'
+  - '50/tcp'
+  - '2375/tcp'
+  - '2376/tcp'
+  - '22/tcp'
   when:
     - ansible_facts['distribution'] == "CentOS"
-    - firewalld_firewall_check.rc == "0"
+    - firewalld_firewall_check.rc == 0
   tags:
     - firewall
 
@@ -100,27 +121,28 @@
   - https
   when:
     - ansible_facts['distribution'] == "CentOS"
-    - firewalld_firewall_check.rc == "0"
+    - firewalld_firewall_check.rc == 0
   tags:
     - firewall
 
 
 - name: "Allow Ports in Ubuntu for Docker Swarm"
   ufw:
+    state: enabled
     rule: allow
     port: "{{ item }}"
     proto: tcp
   with_items:
-  - 2377V
-  - 7946
-  - 8080
-  - 50
-  - 2375
-  - 2376
-  - 22
+  - '2377'
+  - '7946'
+  - '8080'
+  - '50'
+  - '2375'
+  - '2376'
+  - '22'
   when:
     - ansible_facts['distribution'] == "Ubuntu"
-    - ufw_firewall_check.rc == "0"
+    - ufw_firewall_check.rc == 0
   tags:
     - firewall
 
@@ -135,7 +157,7 @@
   - 4789
   when:
     - ansible_facts['distribution'] == "Ubuntu"
-    - ufw_firewall_check.rc == "0"
+    - ufw_firewall_check.rc == 0
   tags:
     - firewall
 
@@ -154,9 +176,11 @@
   - 2376
   - 22
   when:
-    - firewalld_firewall_check.rc == "1"
-    - ufw_firewall_check.rc == "1"
-    - iptables_firewall_check.rc == "0"
+    - firewalld_firewall_check.rc == 1
+    - ufw_firewall_check.rc == 1
+    - iptables_firewall_check.rc == 0
+  tags:
+    - firewall
 
 - name: Add Docker repo
   get_url:
