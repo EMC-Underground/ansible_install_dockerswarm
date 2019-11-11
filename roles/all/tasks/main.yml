@@ -23,7 +23,7 @@
   include_tasks: centos_kernel_upgrade.yml
   when:
     - ansible_kernel is version('4.0','<')
-    - ansible_facts['distribution'i] == "CentOS"
+    - ansible_facts['distribution'] == "CentOS"
   tags:
     - kernel
 
