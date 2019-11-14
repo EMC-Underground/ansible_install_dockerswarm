@@ -3,7 +3,6 @@
   with_items:
   - git
   - vim
-  - numactl
   - sysfsutils
   - unzip
   - wget
@@ -197,13 +196,6 @@
   tags:
     - swarm
 
-- name: "Install Docker-CE"
-  package:
-    name: docker-ce
-    state: present
-  tags:
-    - swarm
-
 - name: Creates directory
   file:
     path: /etc/systemd/system/docker.service.d
@@ -218,6 +210,13 @@
   tags:
     - swarm
 
+- name: "Install Docker-CE"
+  package:
+    name: docker-ce
+    state: present
+  tags:
+    - swarm
+    
 - name: "Make sure the service starts at boot and is currently started"
   systemd:
     name: docker
