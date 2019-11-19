@@ -41,146 +41,56 @@
 - name: "Check if UFW is installed"
   shell: command -v ufw
   register: ufw_firewall_check
-  ignore_errors: yes
-  tags:
-    - firewall
-
-- debug:
-    var: ufw_firewall_check
+  failed_when:
+    - ufw_firewall_check != 0
+    - ufw_firewall_check != 1
   tags:
     - firewall
 
 - name: "Check if Firewalld is installed"
   command: "command -v firewalld"
   register: firewalld_firewall_check
-  changed_when:
-    - firewalld_firewall_check.rc == 0
-  ignore_errors: yes
+  failed_when:
+    - ufw_firewall_check != 0
+    - ufw_firewall_check != 1
   tags:
     - firewall
 
 - name: "Check if IPTables is installed"
   command: "command -v iptables"
   register: iptables_firewall_check
-  ignore_errors: yes
+  failed_when:
+    - ufw_firewall_check != 0
+    - ufw_firewall_check != 1
   tags:
     - firewall
 
-- debug:
-    var: ufw_firewall_check.rc
-  tags:
-    - firewall
 
-- debug:
-    var: firewalld_firewall_check.rc
-  tags:
-    - firewall
-
-- name: "Enable Centos FireWalld Service"
-  systemd:
-    name: firewalld
-    state: started
-    enabled: yes
-  when:
-    - ansible_facts['distribution'] == "CentOS"
-    - firewalld_firewall_check.rc == 0
-  tags:
-    - swarm
-    - firewall
-
-- name: "Open Firewall ports for Docker Swarm"
-  firewalld:
-    zone: public
-    port: "{{ item }}"
-    permanent: yes
-    state: enabled
-  with_items:
-  - '2377/tcp'
-  - '7946/tcp'
-  - '7946/udp'
-  - '4789/udp'
-  - '8080/tcp'
-  - '50/tcp'
-  - '2375/tcp'
-  - '2376/tcp'
-  - '22/tcp'
+- name: "Enable Firewalld and Open Ports for Docker Swarm"
+  include_tasks: firewalld.yml
   when:
     - ansible_facts['distribution'] == "CentOS"
     - firewalld_firewall_check.rc == 0
   tags:
     - firewall
 
-- name: "Open Firewall ports for the service http and https"
-  firewalld:
-    zone: public
-    service: "{{ item }}"
-    permanent: yes
-    state: enabled
-  with_items:
-  - http
-  - https
-  when:
-    - ansible_facts['distribution'] == "CentOS"
-    - firewalld_firewall_check.rc == 0
-  tags:
-    - firewall
-
-
-- name: "Allow Ports in Ubuntu for Docker Swarm"
-  ufw:
-    state: enabled
-    rule: allow
-    port: "{{ item }}"
-    proto: tcp
-  with_items:
-  - '2377'
-  - '7946'
-  - '8080'
-  - '50'
-  - '2375'
-  - '2376'
-  - '22'
+- name: "Enable UFW and Open Ports for Docker Swarm"
+  include_tasks: ufw.yml
   when:
     - ansible_facts['distribution'] == "Ubuntu"
     - ufw_firewall_check.rc == 0
   tags:
     - firewall
 
-- name: "Allow Ports in Ubuntu for Docker Swarm"
-  ufw:
-    state: enabled
-    rule: allow
-    port: "{{ item }}"
-    proto: udp
-  with_items:
-  - 7946
-  - 4789
-  when:
-    - ansible_facts['distribution'] == "Ubuntu"
-    - ufw_firewall_check.rc == 0
-  tags:
-    - firewall
-
-- name: "Open Ports for IPTables"
-  iptables:
-    chain: INPUT
-    protocol: tcp
-    destination_port: "{{ item }}"
-    jump: ACCEPT
-  with_items:
-  - 2377
-  - 7946
-  - 8080
-  - 50
-  - 2375
-  - 2376
-  - 22
+- name: "Enable IPTables and Open Ports for Docker Swarm"
+  include_tasks: iptables.yml
   when:
     - firewalld_firewall_check.rc == 1
     - ufw_firewall_check.rc == 1
     - iptables_firewall_check.rc == 0
   tags:
     - firewall
+
 
 - name: Add Docker repo
   get_url:
@@ -217,7 +127,7 @@
     state: present
   tags:
     - swarm
-    
+
 - name: "Make sure the service starts at boot and is currently started"
   systemd:
     name: docker

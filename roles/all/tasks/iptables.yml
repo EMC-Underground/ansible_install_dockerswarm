@@ -1,0 +1,17 @@
+---
+- name: "Open Ports for IPTables"
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+  with_items:
+  - 2377
+  - 7946
+  - 8080
+  - 50
+  - 2375
+  - 2376
+  - 22
+  tags:
+    - firewall
