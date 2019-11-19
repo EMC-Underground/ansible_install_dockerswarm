@@ -1,7 +1,11 @@
 - name: "See if node is already in a swarm"
   shell: "docker info | grep Swarm | sed 's/Swarm: //g' | tr -d '[:space:]' | xargs"
   register: swarm_state
+  tags:
+    - swarm
 
 - name: "Join the Swarm Cluster if needed"
   shell: "{{ hostvars['MASTER_TOKEN_HOLDER']['token'] }}"
   when: swarm_state.stdout == "inactive"
+  tags:
+    - swarm

@@ -11,12 +11,12 @@
   - lvm2
   tags:
     - swarm
-    - test
 
 - debug:
     var: ansible_kernel
   tags:
     - kernel
+    - swarm
 
 - name: "Upgrade Kernel to 5.x"
   include_tasks: centos_kernel_upgrade.yml
@@ -25,6 +25,7 @@
     - ansible_facts['distribution'] == "CentOS"
   tags:
     - kernel
+    - swarm
 
 - name: set timezone to UTC
   timezone:
@@ -46,6 +47,7 @@
     - ufw_firewall_check.rc != 1
   tags:
     - firewall
+    - swarm
 
 - name: "Check if Firewalld is installed"
   command: "command -v firewalld"
@@ -55,6 +57,7 @@
     - firewalld_firewall_check.rc != 1
   tags:
     - firewall
+    - swarm
 
 - name: "Check if IPTables is installed"
   command: "command -v iptables"
@@ -64,6 +67,7 @@
     - iptables_firewall_check.rc != 1
   tags:
     - firewall
+    - swarm
 
 
 - name: "Enable Firewalld and Open Ports for Docker Swarm"
@@ -73,6 +77,7 @@
     - firewalld_firewall_check.rc == 0
   tags:
     - firewall
+    - swarm
 
 - name: "Enable UFW and Open Ports for Docker Swarm"
   include_tasks: ufw.yml
@@ -81,6 +86,7 @@
     - ufw_firewall_check.rc == 0
   tags:
     - firewall
+    - swarm
 
 - name: "Enable IPTables and Open Ports for Docker Swarm"
   include_tasks: iptables.yml
@@ -90,6 +96,7 @@
     - iptables_firewall_check.rc == 0
   tags:
     - firewall
+    - swarm
 
 
 - name: Add Docker repo
@@ -156,6 +163,8 @@
 - name: Adding user root
   user: name=root
         group=docker
+  tags:
+    - swarm
 
 - name: "Find out if rexray is already installed"
   shell: docker plugin ls | grep rexray

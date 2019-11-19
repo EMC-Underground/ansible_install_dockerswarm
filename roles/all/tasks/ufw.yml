@@ -27,3 +27,8 @@
   - 4789
   tags:
     - firewall
+
+- name: "Restar the Firewalld service"
+  service:
+    name: ufw
+    state: restarted

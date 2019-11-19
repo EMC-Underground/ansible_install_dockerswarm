@@ -37,3 +37,9 @@
   - https
   tags:
     - firewall
+
+
+- name: "Restar the Firewalld service"
+  service:
+    name: firewalld
+    state: restarted
