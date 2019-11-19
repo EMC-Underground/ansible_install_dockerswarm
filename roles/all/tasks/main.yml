@@ -42,8 +42,8 @@
   shell: command -v ufw
   register: ufw_firewall_check
   failed_when:
-    - ufw_firewall_check != 0
-    - ufw_firewall_check != 1
+    - ufw_firewall_check.rc != 0
+    - ufw_firewall_check.rc != 1
   tags:
     - firewall
 
@@ -51,8 +51,8 @@
   command: "command -v firewalld"
   register: firewalld_firewall_check
   failed_when:
-    - ufw_firewall_check != 0
-    - ufw_firewall_check != 1
+    - firewalld_firewall_check.rc != 0
+    - firewalld_firewall_check.rc != 1
   tags:
     - firewall
 
@@ -60,8 +60,8 @@
   command: "command -v iptables"
   register: iptables_firewall_check
   failed_when:
-    - ufw_firewall_check != 0
-    - ufw_firewall_check != 1
+    - iptables_firewall_check.rc != 0
+    - iptables_firewall_check.rc != 1
   tags:
     - firewall
 
