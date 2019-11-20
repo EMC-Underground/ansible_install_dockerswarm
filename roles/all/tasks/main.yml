@@ -27,6 +27,13 @@
     - kernel
     - swarm
 
+- name: "Enable seLinux"
+  selinux:
+    policy: targeted
+    state: enforcing
+  tags:
+    - swarm
+
 - name: set timezone to UTC
   timezone:
     name: UTC
