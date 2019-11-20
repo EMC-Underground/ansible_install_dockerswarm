@@ -27,6 +27,16 @@
     - kernel
     - swarm
 
+- name: "Enable PermitRootLogin in sshd_config"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#PermitRootLogin yes'
+    insertbefore: 'P '
+    line: 'PermitRootLogin yes'
+  tags:
+    - rootlogin
+
+
 - name: "Enable seLinux"
   selinux:
     policy: targeted
