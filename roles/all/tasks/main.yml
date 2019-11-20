@@ -33,8 +33,11 @@
     regexp: '^#PermitRootLogin yes'
     insertbefore: 'P '
     line: 'PermitRootLogin yes'
-  tags:
-    - rootlogin
+
+- name: "Restart the sshd service"
+  service:
+    name: sshd
+    state: restarted
 
 
 - name: "Enable seLinux"
