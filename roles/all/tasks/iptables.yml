@@ -16,7 +16,11 @@
   tags:
     - firewall
 
-- name: "Restar the Firewalld service"
+- name: "Save the IP table settings change"
+  shell: service iptables save
+  become: true
+
+- name: "Restart the iptables service"
   service:
     name: iptables
     state: restarted
