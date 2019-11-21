@@ -34,4 +34,6 @@ run:
     sed -i "/\[defaults\]/a host_key_checking = False" /etc/ansible/ansible.cfg
     mv vars.yml.example vars.yml
     ansible-galaxy install ericsysmin.chrony
+    echo ((password))
+    echo ((user_name))
     ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name))
