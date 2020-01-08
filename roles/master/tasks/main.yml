@@ -1,13 +1,19 @@
 - name: "See if node is already in a swarm"
   shell: "docker info | grep Swarm | sed 's/Swarm: //g' | tr -d '[:space:]' | xargs"
   register: swarm_state
-  
-- name: "Swarm output"
-  debug:
-    var: swarm_state
-    
+
+- name: "Determining if inventory has the IP or not"
+  set_fact:
+    swarm_master: "{{ inventory_hostname }}"
+    when: {{ inventory_hostname | ip_addr }}
+
+- name: "Determining if inventory has the IP or not"
+  set_fact:
+    swarm_master: "{{ ansible_default_ipv4.address }}"
+    when: not {{ inventory_hostname | ip_addr }}
+
 - name: "Initialize docker swarm instance and caputure ID"
-  shell: "docker swarm init --advertise-addr {{ ansible_default_ipv4.address }}"
+  shell: "docker swarm init --advertise-addr {{ swarm_master }}"
   register: docker_id
   when: swarm_state.stdout == "inactive"
 
