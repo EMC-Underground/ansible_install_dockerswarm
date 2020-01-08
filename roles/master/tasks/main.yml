@@ -1,25 +1,38 @@
 - name: "See if node is already in a swarm"
   shell: "docker info | grep Swarm | sed 's/Swarm: //g' | tr -d '[:space:]' | xargs"
   register: swarm_state
-  
+  tags:
+    - swarm
+
 - name: "Swarm output"
   debug:
     var: swarm_state
-    
+  tags:
+    - swarm
+    - debug
+
 - name: "Initialize docker swarm instance and caputure ID"
   shell: "docker swarm init --advertise-addr {{ ansible_default_ipv4.address }}"
   register: docker_id
   when: swarm_state.stdout == "inactive"
+  tags:
+    - swarm
 
 - name: "Display docker swarm token ID"
   shell: "docker swarm join-token manager | awk '{if(NR>1)print}'"
   register: docker_id_number
+  tags:
+    - swarm
 
 - name: "Add Token and to dummy host, used to pass variable to other playbook"
   add_host:
     name:   "MASTER_TOKEN_HOLDER"
     token:  "{{ docker_id_number.stdout }}"
+  tags:
+    - swarm
 
 - name: "Master Swarm IP"
   debug:
     var: ansible_default_ipv4.address
+  tags:
+    - swarm

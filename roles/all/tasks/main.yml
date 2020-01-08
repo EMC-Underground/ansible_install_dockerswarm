@@ -3,7 +3,6 @@
   with_items:
   - git
   - vim
-  - numactl
   - sysfsutils
   - unzip
   - wget
@@ -12,20 +11,41 @@
   - lvm2
   tags:
     - swarm
-    - test
 
 - debug:
     var: ansible_kernel
   tags:
     - kernel
+    - swarm
 
 - name: "Upgrade Kernel to 5.x"
   include_tasks: centos_kernel_upgrade.yml
   when:
     - ansible_kernel is version('4.0','<')
-    - ansible_facts['distribution'i] == "CentOS"
+    - ansible_facts['distribution'] == "CentOS"
   tags:
     - kernel
+    - swarm
+
+- name: "Enable PermitRootLogin in sshd_config"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#PermitRootLogin yes'
+    insertbefore: 'P '
+    line: 'PermitRootLogin yes'
+
+- name: "Restart the sshd service"
+  service:
+    name: sshd
+    state: restarted
+
+
+- name: "Enable seLinux"
+  selinux:
+    policy: targeted
+    state: enforcing
+  tags:
+    - swarm
 
 - name: set timezone to UTC
   timezone:
@@ -33,83 +53,70 @@
     hwclock: UTC
   tags:
     - swarm
+  ignore_errors: yes
 
 - debug:
     var: ansible_facts['distribution']
 
-- name: "Enable Centos FireWall Service"
-  systemd:
-    name: firewalld
-    state: started
-    enabled: yes
-  when: ansible_facts['distribution'] == "CentOS"
+
+- name: "Check if UFW is installed"
+  shell: command -v ufw
+  register: ufw_firewall_check
+  failed_when:
+    - ufw_firewall_check.rc != 0
+    - ufw_firewall_check.rc != 1
   tags:
+    - firewall
     - swarm
-    - firewall
 
-- name: "Open Firewall ports for Docker Swarm"
-  firewalld:
-    zone: public
-    port: "{{ item }}"
-    permanent: yes
-    state: enabled
-  with_items:
-  - 2377/tcp
-  - 7946/tcp
-  - 7946/udp
-  - 4789/udp
-  - 8080/tcp
-  - 50/tcp
-  - 2375/tcp
-  - 2376/tcp
-  - 22/tcp
-  when: ansible_facts['distribution'] == "CentOS"
+- name: "Check if Firewalld is installed"
+  command: "command -v firewalld"
+  register: firewalld_firewall_check
+  failed_when:
+    - firewalld_firewall_check.rc != 0
+    - firewalld_firewall_check.rc != 1
   tags:
     - firewall
+    - swarm
 
-- name: "Open Firewall ports for the service http and https"
-  firewalld:
-    zone: public
-    service: "{{ item }}"
-    permanent: yes
-    state: enabled
-  with_items:
-  - http
-  - https
-  when: ansible_facts['distribution'] == "CentOS"
+- name: "Check if IPTables is installed"
+  command: "command -v iptables"
+  register: iptables_firewall_check
+  failed_when:
+    - iptables_firewall_check.rc != 0
+    - iptables_firewall_check.rc != 1
   tags:
     - firewall
+    - swarm
 
 
-- name: "Allow Ports in Ubuntu for Docker Swarm"
-  ufw:
-    rule: allow
-    port: "{{ item }}"
-    proto: tcp
-  with_items:
-  - 2377
-  - 7946
-  - 8080
-  - 50
-  - 2375
-  - 2376
-  - 22
-  when: ansible_facts['distribution'] == "Ubuntu"
+- name: "Enable Firewalld and Open Ports for Docker Swarm"
+  include_tasks: firewalld.yml
+  when:
+    - ansible_facts['distribution'] == "CentOS"
+    - firewalld_firewall_check.rc == 0
   tags:
     - firewall
+    - swarm
 
-- name: "Allow Ports in Ubuntu for Docker Swarm"
-  ufw:
-    state: enabled
-    rule: allow
-    port: "{{ item }}"
-    proto: udp
-  with_items:
-  - 7946
-  - 4789
-  when: ansible_facts['distribution'] == "Ubuntu"
+- name: "Enable UFW and Open Ports for Docker Swarm"
+  include_tasks: ufw.yml
+  when:
+    - ansible_facts['distribution'] == "Ubuntu"
+    - ufw_firewall_check.rc == 0
   tags:
     - firewall
+    - swarm
+
+- name: "Enable IPTables and Open Ports for Docker Swarm"
+  include_tasks: iptables.yml
+  when:
+    - firewalld_firewall_check.rc == 1
+    - ufw_firewall_check.rc == 1
+    - iptables_firewall_check.rc == 0
+  tags:
+    - firewall
+    - swarm
 
 
 - name: Add Docker repo
@@ -127,13 +134,6 @@
   tags:
     - swarm
 
-- name: "Install Docker-CE"
-  package:
-    name: docker-ce
-    state: present
-  tags:
-    - swarm
-
 - name: Creates directory
   file:
     path: /etc/systemd/system/docker.service.d
@@ -145,6 +145,13 @@
   copy:
     src: ./files/override.conf
     dest: /etc/systemd/system/docker.service.d/override.conf
+  tags:
+    - swarm
+
+- name: "Install Docker-CE"
+  package:
+    name: docker-ce
+    state: present
   tags:
     - swarm
 
@@ -176,6 +183,8 @@
 - name: Adding user root
   user: name=root
         group=docker
+  tags:
+    - swarm
 
 - name: "Find out if rexray is already installed"
   shell: docker plugin ls | grep rexray

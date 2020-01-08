@@ -1,0 +1,45 @@
+---
+- name: "Enable Centos FireWalld Service"
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+  tags:
+    - firewall
+
+- name: "Open Firewall ports for Docker Swarm"
+  firewalld:
+    zone: public
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  with_items:
+  - '2377/tcp'
+  - '7946/tcp'
+  - '7946/udp'
+  - '4789/udp'
+  - '8080/tcp'
+  - '50/tcp'
+  - '2375/tcp'
+  - '2376/tcp'
+  - '22/tcp'
+  tags:
+    - firewall
+
+- name: "Open Firewall ports for the service http and https"
+  firewalld:
+    zone: public
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+  with_items:
+  - http
+  - https
+  tags:
+    - firewall
+
+
+- name: "Restar the Firewalld service"
+  service:
+    name: firewalld
+    state: restarted
