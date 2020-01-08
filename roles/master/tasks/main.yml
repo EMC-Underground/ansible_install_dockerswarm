@@ -4,15 +4,34 @@
   tags:
     - swarm
 
-- name: "Swarm output"
+- name: "printing inventory_hostname"
   debug:
     var: swarm_state
   tags:
     - swarm
+
+- name: "Determining if inventory has the IP or not"
+  set_fact:
+    swarm_master: "{{ inventory_hostname }}"
+    when: {{ inventory_hostname | ip_addr }}
+  tags:
+    - swarm
+
+- name: "Determining if inventory has the IP or not"
+  set_fact:
+    swarm_master: "{{ ansible_default_ipv4.address }}"
+    when: not {{ inventory_hostname | ip_addr }}
+  tags:
+    - swarm
+
+- name: "Swarm output"
+  debug:
+    var: swarm_state
+  tags:
     - debug
 
 - name: "Initialize docker swarm instance and caputure ID"
-  shell: "docker swarm init --advertise-addr {{ ansible_default_ipv4.address }}"
+  shell: "docker swarm init --advertise-addr {{ swarm_master }}"
   register: docker_id
   when: swarm_state.stdout == "inactive"
   tags:
@@ -33,6 +52,6 @@
 
 - name: "Master Swarm IP"
   debug:
-    var: ansible_default_ipv4.address
+    var: swarm_master
   tags:
     - swarm
