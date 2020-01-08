@@ -13,7 +13,7 @@
 - name: "Determining if inventory has the IP or not"
   set_fact:
     swarm_master: "{{ inventory_hostname }}"
-    when: "{{ inventory_hostname | ipaddr }}"
+    when: inventory_hostname | ipaddr(bool)
   tags:
     - swarm
 
@@ -26,7 +26,7 @@
 - name: "Determining if inventory has the IP or not"
   set_fact:
     swarm_master: "{{ ansible_default_ipv4.address }}"
-    when: not "{{ inventory_hostname | ipaddr }}"
+    when: not inventory_hostname | ipaddr(bool)
   tags:
     - swarm
 
