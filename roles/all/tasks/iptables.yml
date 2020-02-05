@@ -16,6 +16,18 @@
   tags:
     - firewall
 
+- name: "Open Ports for IPTables"
+  iptables:
+    chain: INPUT
+    protocol: udp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+  with_items:
+  - 7946
+  - 4789
+  tags:
+    - firewall
+
 - name: "Save the IP table settings change"
   shell: service iptables save
   become: true
