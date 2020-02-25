@@ -21,7 +21,7 @@
 - name: "Upgrade Kernel to 5.x"
   include_tasks: centos_kernel_upgrade.yml
   when:
-    - ansible_kernel is version('4.0','<')
+    - ansible_kernel is version('3.0','<')
     - ansible_facts['distribution'] == "CentOS"
   tags:
     - kernel
@@ -169,7 +169,7 @@
     src: ./files/EMC-ScaleIO-sdc-{{vxflex_version}}.el7.x86_64.rpm
     dest: /tmp/EMC-ScaleIO-sdc-{{vxflex_version}}.el7.x86_64.rpm
   tags:
-    - vxflex
+    - sdc
 
 - name: Install SDC
   yum:
@@ -178,7 +178,7 @@
   environment:
     MDM_IP: "{{ vxflex_master_mdm_ip | join(',') }},{{ vxflex_standby_mdm_ip | join(',')}}"
   tags:
-    - vxflex
+    - sdc
 
 - name: Adding user root
   user: name=root
