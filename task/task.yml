@@ -36,4 +36,4 @@ run:
     ansible-galaxy install ericsysmin.chrony
     pip install netaddr
     echo ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name))
-    ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name))
+    ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --skip-tags vxflex,sdc -u ((user_name))
