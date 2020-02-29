@@ -44,8 +44,13 @@
   selinux:
     policy: targeted
     state: disabled
+  register: selinux_output
   tags:
     - swarm
+
+- name: "Reboot if selinux needs it"
+  reboot:
+  when: selinux_output.reboot_required
 
 - name: set timezone to UTC
   timezone:
