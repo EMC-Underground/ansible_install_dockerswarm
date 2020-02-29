@@ -40,10 +40,10 @@
     state: restarted
 
 
-- name: "Enable seLinux"
+- name: "Disable seLinux"
   selinux:
     policy: targeted
-    state: enforcing
+    state: disabled
   tags:
     - swarm
 
