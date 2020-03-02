@@ -33,6 +33,12 @@
   tags:
     - swarm
 
+- name: print the output from disabling selinux
+  debug:
+    var: selinux_output
+  tags:
+    - swarm
+
 - name: "Reboot if selinux needs it"
   reboot:
   when: selinux_output.reboot_required
