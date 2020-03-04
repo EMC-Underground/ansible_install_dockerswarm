@@ -30,6 +30,13 @@
   tags:
     - firewall
 
+- name: "Change FORWARD chain to ACCEPT"
+  iptables:
+    chain: FORWARD
+    policy: ACCEPT
+  tags:
+    - firewall
+
 - name: "Save the IP table settings change"
   shell: service iptables save
   become: true
