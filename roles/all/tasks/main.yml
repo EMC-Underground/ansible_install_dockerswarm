@@ -107,8 +107,6 @@
 - name: "Enable IPTables and Open Ports for Docker Swarm"
   include_tasks: iptables.yml
   when:
-    - firewalld_firewall_check.rc == 1
-    - ufw_firewall_check.rc == 1
     - iptables_firewall_check.rc == 0
   tags:
     - firewall
