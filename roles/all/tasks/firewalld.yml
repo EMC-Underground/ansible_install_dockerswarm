@@ -50,6 +50,12 @@
   - '7072/tcp'
   - '9099/tcp'
   - '162/udp'
+  - '25620/tcp'
+  - '25600/tcp'
+  - '25640/tcp'
+  - '25620/udp'
+  - '25600/udp'
+  - '25640/udp'
   tags:
     - firewall
     - vxflex

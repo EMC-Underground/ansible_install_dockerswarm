@@ -60,6 +60,9 @@
     proto: udp
   with_items:
   - 162
+  - 25620
+  - 25600
+  - 25640
   tags:
     - firewall
     - vxflex
