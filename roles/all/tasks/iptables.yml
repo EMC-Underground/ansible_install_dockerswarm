@@ -40,6 +40,12 @@
 - name: "Save the IP table settings change"
   shell: service iptables save
   become: true
+  when: ansible_facts['distribution'] == "Ubuntu"
+
+- name: "Save the IP table settings change"
+  shell: iptables-save
+  become: true
+  when: ansible_facts['distribution'] == "CentOS"
 
 - name: "Restart the iptables service"
   service:
