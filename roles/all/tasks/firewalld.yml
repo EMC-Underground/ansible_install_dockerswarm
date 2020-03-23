@@ -38,8 +38,26 @@
   tags:
     - firewall
 
+- name: "Open Firewall ports for vxFlex"
+  firewalld:
+    zone: public
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  with_items:
+  - '6611/tcp'
+  - '9011/tcp'
+  - '7072/tcp'
+  - '9099/tcp'
+  - '162/udp'
+  tags:
+    - firewall
+    - vxflex
 
-- name: "Restar the Firewalld service"
+- name: "Restart the Firewalld service"
   service:
     name: firewalld
     state: restarted
+  tags:
+    - firewall
+    - vxflex
