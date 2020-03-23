@@ -37,12 +37,12 @@
   tags:
     - firewall
 
-- name: "Save the IP table settings change"
+- name: "Save the IP table settings change for Ubuntu"
   shell: service iptables save
   become: true
   when: ansible_facts['distribution'] == "Ubuntu"
 
-- name: "Save the IP table settings change"
+- name: "Save the IP table settings change for CentOS"
   shell: iptables-save
   become: true
   when: ansible_facts['distribution'] == "CentOS"
@@ -51,3 +51,4 @@
   service:
     name: iptables
     state: restarted
+  when: ansible_facts['distribution'] == "Ubuntu"
