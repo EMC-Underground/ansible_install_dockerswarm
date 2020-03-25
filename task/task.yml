@@ -18,7 +18,6 @@ params:
   vxflex_system_name: ((vxflex_system_name))
   vxflex_protection_domain: ((vxflex_protection_domain))
   vxflex_storage_pool: ((vxflex_storage_pool))
-  vxflex_username: ((vxflex_username))
 run:
   path: bash
   args:
