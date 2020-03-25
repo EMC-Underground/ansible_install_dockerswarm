@@ -68,7 +68,6 @@
     chain: FORWARD
     policy: ACCEPT
   tags:
-    - vxflex
     - swarm
 
 - name: "Save the IP table settings change for Ubuntu"
@@ -76,7 +75,6 @@
   become: true
   when: ansible_facts['distribution'] == "Ubuntu"
   tags:
-    - vxflex
     - swarm
 
 - name: "Save the IP table settings change for CentOS"
@@ -84,7 +82,6 @@
   become: true
   when: ansible_facts['distribution'] == "CentOS"
   tags:
-    - vxflex
     - swarm
 
 - name: "Restart the iptables service"
@@ -93,5 +90,4 @@
     state: restarted
   when: ansible_facts['distribution'] == "Ubuntu"
   tags:
-    - vxflex
     - swarm
