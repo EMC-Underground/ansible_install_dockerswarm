@@ -43,5 +43,6 @@ run:
     mv vars.yml.example vars.yml
     ansible-galaxy install ericsysmin.chrony
     pip install netaddr
+    pip install jmespath
     echo ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --tags ((swarm_tags)) -u ((user_name))
     ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --tags ((swarm_tags)) -u ((user_name))
