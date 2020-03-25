@@ -5,7 +5,7 @@
     state: started
     enabled: yes
   tags:
-    - firewall
+    - vxflex
 
 - name: "Open Firewall ports for Docker Swarm"
   firewalld:
@@ -25,7 +25,7 @@
   - '22/tcp'
   - '2222/tcp'
   tags:
-    - firewall
+    - vxflex
 
 - name: "Open Firewall ports for the service http and https"
   firewalld:
@@ -37,7 +37,7 @@
   - http
   - https
   tags:
-    - firewall
+    - vxflex
 
 - name: "Open Firewall ports for vxFlex"
   firewalld:
@@ -58,7 +58,6 @@
   - '25600/udp'
   - '25640/udp'
   tags:
-    - firewall
     - vxflex
 
 - name: "Restart the Firewalld service"
@@ -66,5 +65,4 @@
     name: firewalld
     state: restarted
   tags:
-    - firewall
     - vxflex
