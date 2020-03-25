@@ -163,7 +163,7 @@
     name: https://object.bluehairfreak.com/vxflexos/EMC-ScaleIO-sdc.el7.x86_64.rpm
     state: present
   environment:
-    MDM_IP: "{{ vxflex_mas | join(',') }},{{ vxflex_standby_mdm_ip | join(',')}}"
+    MDM_IP: "{{ mdm_ips }}"
   tags:
     - vxflex
 
@@ -183,5 +183,10 @@
 - name: "Install RexRay if it is not already installed"
   shell: echo "y" | docker plugin install rexray/scaleio SCALEIO_ENDPOINT=https://{{ lookup('env','vxflex_gateway_ip') }}:{{ lookup('env','vxflex_gateway_port') }}/api SCALEIO_USERNAME={{ lookup('env','vxflex_username') }} SCALEIO_PASSWORD={{ lookup('env','vxflex_password') }} SCALEIO_SYSTEMNAME={{ lookup('env','vxflex_system_name') }} SCALEIO_PROTECTIONDOMAINNAME={{ lookup('env','vxflex_protection_domain') }} SCALEIO_STORAGEPOOLNAME={{ lookup('env','vxflex_storage_pool') }} REXRAY_PREEMPT=true REXRAY_LOGLEVEL='DEBUG'
   when: REXRAY.rc == 1
+  tags:
+    - vxflex
+
+- name: "Ensure the rexray plugin is enabled"
+  shell: status=`docker plugin ls | grep rexray` && [ ! `echo $status | awk '{print $NF}'` ] && docker plugin enable `echo $status | awk '{print $1}'`
   tags:
     - vxflex
