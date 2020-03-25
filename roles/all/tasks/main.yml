@@ -158,12 +158,51 @@
   tags:
     - swarm
 
+- name: "Query MDM Cluster to get MDM IP's"
+  uri:
+    url: "https://{{ lookup('env','vxflex_gateway_ip') }}:{{ lookup('env','vxflex_gateway_port') }}\
+        /api/instances/System/queryMdmCluster"
+    return_content: yes
+    method: POST
+    body: {}
+    body_format: json
+    validate_certs: False
+    status_code:
+      - 200
+      - 201
+      - 202
+  register: cluster_output
+  tags:
+    - vxflex
+
+- name: "Gather master IP's"
+  set_fact:
+    masterMDMs: "{{ cluster_output.json | json_query(query) }}"
+  vars:
+    query: "master.ips"
+  tags:
+    - vxflex
+
+- name: "Gather slave IP's"
+  set_fact:
+    slaveMDMs: "{{ cluster_output.json | json_query(query) }}"
+  vars:
+    query: "slaves[].ips"
+  tags:
+    - vxflex
+
+- name: "Combine all IP's"
+  set_fact:
+    MDMs: "{{ masterMDMs + slaveMDMs | flatten }}"
+  tags:
+    - vxflex
+
 - name: Install SDC
   yum:
     name: https://object.bluehairfreak.com/vxflexos/EMC-ScaleIO-sdc.el7.x86_64.rpm
     state: present
   environment:
-    MDM_IP: "{{ mdm_ips }}"
+    MDM_IP: "{{ MDMs | join(',') }}"
   tags:
     - vxflex
 
