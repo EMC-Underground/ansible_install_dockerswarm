@@ -23,6 +23,7 @@
   - '2375/tcp'
   - '2376/tcp'
   - '22/tcp'
+  - '2222/tcp'
   tags:
     - firewall
 
