@@ -16,7 +16,7 @@
   - 2376
   - 22
   tags:
-    - firewall
+    - vxflex
 
 - name: "Open Ports IPTables for vxFlex"
   iptables:
@@ -34,7 +34,6 @@
   - 25600
   - 25640
   tags:
-    - firewall
     - vxflex
 
 - name: "Open Ports for IPTables"
@@ -47,7 +46,7 @@
   - 7946
   - 4789
   tags:
-    - firewall
+    - vxflex
 
 - name: "Open Ports for IPTables for vxFlex"
   iptables:
@@ -61,7 +60,6 @@
   - 25600
   - 25640
   tags:
-    - firewall
     - vxflex
 
 - name: "Change FORWARD chain to ACCEPT"
@@ -69,7 +67,6 @@
     chain: FORWARD
     policy: ACCEPT
   tags:
-    - firewall
     - vxflex
 
 - name: "Save the IP table settings change for Ubuntu"
@@ -77,7 +74,6 @@
   become: true
   when: ansible_facts['distribution'] == "Ubuntu"
   tags:
-    - firewall
     - vxflex
 
 - name: "Save the IP table settings change for CentOS"
@@ -85,7 +81,6 @@
   become: true
   when: ansible_facts['distribution'] == "CentOS"
   tags:
-    - firewall
     - vxflex
 
 - name: "Restart the iptables service"
@@ -94,5 +89,4 @@
     state: restarted
   when: ansible_facts['distribution'] == "Ubuntu"
   tags:
-    - firewall
     - vxflex

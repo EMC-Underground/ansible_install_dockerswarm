@@ -18,11 +18,15 @@
     regexp: '^#PermitRootLogin yes'
     insertbefore: 'P '
     line: 'PermitRootLogin yes'
+  tags:
+    - swarm
 
 - name: "Restart the sshd service"
   service:
     name: sshd
     state: restarted
+  tags:
+    - swarm
 
 
 - name: "Disable seLinux"
@@ -42,6 +46,8 @@
 - name: "Reboot if selinux needs it"
   reboot:
   when: selinux_output.reboot_required
+  tags:
+    - swarm
 
 - name: set timezone to UTC
   timezone:
@@ -62,7 +68,6 @@
     - ufw_firewall_check.rc != 0
     - ufw_firewall_check.rc != 1
   tags:
-    - firewall
     - swarm
 
 - name: "Check if Firewalld is installed"
@@ -72,7 +77,6 @@
     - firewalld_firewall_check.rc != 0
     - firewalld_firewall_check.rc != 1
   tags:
-    - firewall
     - swarm
 
 - name: "Check if IPTables is installed"
@@ -82,7 +86,6 @@
     - iptables_firewall_check.rc != 0
     - iptables_firewall_check.rc != 1
   tags:
-    - firewall
     - swarm
 
 
@@ -92,7 +95,6 @@
     - ansible_facts['distribution'] == "CentOS"
     - firewalld_firewall_check.rc == 0
   tags:
-    - firewall
     - swarm
 
 - name: "Enable UFW and Open Ports for Docker Swarm"
@@ -101,7 +103,6 @@
     - ansible_facts['distribution'] == "Ubuntu"
     - ufw_firewall_check.rc == 0
   tags:
-    - firewall
     - swarm
 
 - name: "Enable IPTables and Open Ports for Docker Swarm"
@@ -109,7 +110,6 @@
   when:
     - iptables_firewall_check.rc == 0
   tags:
-    - firewall
     - swarm
 
 
@@ -158,21 +158,14 @@
   tags:
     - swarm
 
-- name: Copies the scaleio client to /tmp
-  copy:
-    src: ./files/EMC-ScaleIO-sdc-{{vxflex_version}}.el7.x86_64.rpm
-    dest: /tmp/EMC-ScaleIO-sdc-{{vxflex_version}}.el7.x86_64.rpm
-  tags:
-    - sdc
-
 - name: Install SDC
   yum:
-    name: /tmp/EMC-ScaleIO-sdc-{{vxflex_version}}.el7.x86_64.rpm
+    name: https://object.bluehairfreak.com/vxflexos/EMC-ScaleIO-sdc.el7.x86_64.rpm
     state: present
   environment:
-    MDM_IP: "{{ vxflex_master_mdm_ip | join(',') }},{{ vxflex_standby_mdm_ip | join(',')}}"
+    MDM_IP: "{{ vxflex_mas | join(',') }},{{ vxflex_standby_mdm_ip | join(',')}}"
   tags:
-    - sdc
+    - vxflex
 
 - name: Adding user root
   user: name=root
@@ -188,7 +181,7 @@
     - vxflex
 
 - name: "Install RexRay if it is not already installed"
-  shell: echo "y" | docker plugin install rexray/scaleio SCALEIO_ENDPOINT=https://{{ vxflex_gateway_ip }}:{{ vxflex_gateway_https_port }}/api SCALEIO_USERNAME={{ vxflex_gateway_username }} SCALEIO_PASSWORD={{ vxflex_gateway_pw }} SCALEIO_SYSTEMNAME={{ vxflex_system_name }} SCALEIO_PROTECTIONDOMAINNAME={{ vxflex_protection_domain_name }} SCALEIO_STORAGEPOOLNAME={{vxflex_storage_pool_name}} REXRAY_PREEMPT=true REXRAY_LOGLEVEL={{rexray_log_level}}
+  shell: echo "y" | docker plugin install rexray/scaleio SCALEIO_ENDPOINT=https://{{ lookup('env','vxflex_gateway_ip') }}:{{ lookup('env','vxflex_gateway_port') }}/api SCALEIO_USERNAME={{ lookup('env','vxflex_username') }} SCALEIO_PASSWORD={{ lookup('env','vxflex_password') }} SCALEIO_SYSTEMNAME={{ lookup('env','vxflex_system_name') }} SCALEIO_PROTECTIONDOMAINNAME={{ lookup('env','vxflex_protection_domain') }} SCALEIO_STORAGEPOOLNAME={{ lookup('env','vxflex_storage_pool') }} REXRAY_PREEMPT=true REXRAY_LOGLEVEL='DEBUG'
   when: REXRAY.rc == 1
   tags:
     - vxflex
