@@ -4,6 +4,12 @@
   tags:
     - swarm
 
+- name: "printing swarm state"
+  debug:
+    var: swarm_state
+  tags:
+    - swarm
+
 - name: "printing inventory_hostname"
   debug:
     var: inventory_hostname
