@@ -1,5 +1,5 @@
 ---
-- name: "Enable Centos FireWalld Service"
+- name: "Disable Centos FireWalld Service"
   systemd:
     name: firewalld
     state: stopped
