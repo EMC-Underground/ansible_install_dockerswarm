@@ -1,6 +1,10 @@
 - name: "Installing Basic Tools"
   package: pkg={{ item }} state=installed
   with_items:
+  - epel-release
+  - python-pip
+  - python3
+  - iptables-services
   - git
   - vim
   - sysfsutils
