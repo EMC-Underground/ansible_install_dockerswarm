@@ -1,6 +1,10 @@
 - name: "Installing Basic Tools"
   package: pkg={{ item }} state=installed
   with_items:
+  - epel-release
+  - python-pip
+  - python3
+  - iptables-services
   - git
   - vim
   - sysfsutils
@@ -37,7 +41,7 @@
   tags:
     - swarm
 
-- name: print the output from disabling selinux
+- name: "Print the output from disabling selinux"
   debug:
     var: selinux_output
   tags:
@@ -49,7 +53,7 @@
   tags:
     - swarm
 
-- name: set timezone to UTC
+- name: "Set timezone to UTC"
   timezone:
     name: UTC
     hwclock: UTC
@@ -113,7 +117,7 @@
     - swarm
 
 
-- name: Add Docker repo
+- name: "Add Docker repo"
   get_url:
     url: https://download.docker.com/linux/centos/docker-ce.repo
     dest: /etc/yum.repos.d/docer-ce.repo
@@ -121,21 +125,22 @@
   tags:
     - swarm
 
-- apt_repository:
+- name: "Adding apt repository for docker"
+  apt_repository:
     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
     state: present
   when: ansible_facts['distribution'] == "Ubuntu"
   tags:
     - swarm
 
-- name: Creates directory
+- name: "Creates directory"
   file:
     path: /etc/systemd/system/docker.service.d
     state: directory
   tags:
     - swarm
 
-- name: Copies override.conf for enabling Docker API
+- name: "Copies override.conf for enabling Docker API"
   copy:
     src: ./files/override.conf
     dest: /etc/systemd/system/docker.service.d/override.conf
@@ -197,7 +202,7 @@
   tags:
     - vxflex
 
-- name: Install SDC
+- name: "Install SDC"
   yum:
     name: https://object.bluehairfreak.com/vxflexos/EMC-ScaleIO-sdc.el7.x86_64.rpm
     state: present
@@ -206,7 +211,7 @@
   tags:
     - vxflex
 
-- name: Adding user root
+- name: "Adding user root"
   user: name=root
         group=docker
   tags:

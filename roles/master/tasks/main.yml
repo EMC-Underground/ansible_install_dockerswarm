@@ -4,6 +4,12 @@
   tags:
     - swarm
 
+- name: "printing swarm state"
+  debug:
+    var: swarm_state
+  tags:
+    - swarm
+
 - name: "printing inventory_hostname"
   debug:
     var: inventory_hostname
@@ -13,6 +19,8 @@
 - name: "Determining if inventory has the IP or not"
   set_fact:
     swarm_master: "{{ inventory_hostname if (inventory_hostname | ipaddr('bool')) else ansible_default_ipv4.address }}"
+  tags:
+    - swarm
 
 - name: "printing inventory_hostname"
   debug:
