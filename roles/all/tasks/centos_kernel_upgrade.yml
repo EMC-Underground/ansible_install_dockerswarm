@@ -10,7 +10,6 @@
   yum:
     name: https://object.bluehairfreak.com/vxflexos/kernel-ml-4.10.5-1.el7.elrepo.x86_64.rpm
     state: present
-    become: yes
   tags:
     - swarm
 
