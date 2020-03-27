@@ -212,7 +212,7 @@
 
 - name: "Install SDC"
   yum:
-    name: https://object.bluehairfreak.com/vxflexos/EMC-ScaleIO-sdc.el7.x86_64.rpm
+    name: https://bootstrapdell.blob.core.windows.net/bootstrap/EMC-ScaleIO-sdc-3.0-1100.113.el7.x86_64.rpm
     state: present
   environment:
     MDM_IP: "{{ MDMs | join(',') }}"
