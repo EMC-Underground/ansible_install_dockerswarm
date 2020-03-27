@@ -16,6 +16,14 @@
   tags:
     - swarm
 
+- name: "Upgrade Kernel to 4.x"
+  include_tasks: centos_kernel_upgrade.yml
+  when:
+    - ansible_kernel is version('4.0','<')
+    - ansible_facts['distribution'] == "CentOS"
+  tags:
+    - swarm
+
 - name: "Enable PermitRootLogin in sshd_config"
   lineinfile:
     path: /etc/ssh/sshd_config
