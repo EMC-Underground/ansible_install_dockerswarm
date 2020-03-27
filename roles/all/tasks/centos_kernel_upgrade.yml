@@ -4,38 +4,30 @@
     name: '*'
     state: latest
   tags:
-    - kernel
-
-- name: "Add gpg key for repo"
-  rpm_key:
-    state: present
-    key: https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
-  tags:
-    - kernel
-
-- name: "Enable repo"
-  yum:
-    name: "https://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm"
-    state: present
-  tags:
-    - kernel
+    - vxflex
 
 - name: "Upgrade Kernel"
   yum:
-    name: kernel-ml
-    enablerepo: elrepo-kernel
+    name: https://object.bluehairfreak.com/vxflexos/kernel-ml-4.10.5-1.el7.elrepo.x86_64.rpm
     state: present
+    become: yes
   tags:
-    - kernel
+    - vxflex
+
+- name: "rebuild grub"
+  command: grub2-mkconfig -o /boot/grub2/grub.cfg
+  become: yes
+  tags:
+    - vxflex
 
 - name: "Set Default Kernel to 5.x in grub"
   command: grub2-set-default 0
   become: yes
   tags:
-    - kernel
+    - vxflex
 
 - name: "Reboot server"
   reboot:
     reboot_timeout: 600
   tags:
-    - kernel
+    - vxflex
