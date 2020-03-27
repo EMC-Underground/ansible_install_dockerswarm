@@ -239,6 +239,6 @@
     - vxflex
 
 - name: "Ensure the rexray plugin is enabled"
-  shell: status=`docker plugin ls | grep rexray` && [ ! `echo $status | awk '{print $NF}'` ] && docker plugin enable `echo $status | awk '{print $1}'`
+  shell: status=`docker plugin ls | grep rexray` && [ `echo $status | awk '{print $NF}'` == "false" ] && docker plugin enable `echo $status | awk '{print $1}'`
   tags:
     - vxflex
