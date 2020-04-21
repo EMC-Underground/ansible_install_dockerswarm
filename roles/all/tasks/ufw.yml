@@ -1,0 +1,77 @@
+---
+- name: "Allow Ports in Ubuntu for Docker Swarm"
+  ufw:
+    state: enabled
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  with_items:
+  - '2377'
+  - '7946'
+  - '8080'
+  - '50'
+  - '80'
+  - '443'
+  - '2375'
+  - '2376'
+  - '22'
+  - '2222'
+  tags:
+    - firewall
+
+- name: "Allow TCP Ports in Ubuntu for vxFlex"
+  ufw:
+    state: enabled
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  with_items:
+  - '6611'
+  - '9011'
+  - '7072'
+  - '9099'
+  - '25620'
+  - '25600'
+  - '25640'
+
+  tags:
+    - firewall
+    - vxflex
+
+- name: "Allow Ports in Ubuntu for Docker Swarm"
+  ufw:
+    state: enabled
+    rule: allow
+    port: "{{ item }}"
+    proto: udp
+  with_items:
+  - 7946
+  - 4789
+  - 25620
+  - 25600
+  - 25640
+  tags:
+    - firewall
+
+- name: "Allow UDP Ports in Ubuntu for vxFlex"
+  ufw:
+    state: enabled
+    rule: allow
+    port: "{{ item }}"
+    proto: udp
+  with_items:
+  - 162
+  - 25620
+  - 25600
+  - 25640
+  tags:
+    - firewall
+    - vxflex
+
+- name: "Restar the Firewalld service"
+  service:
+    name: ufw
+    state: restarted
+  tags:
+    - firewall
+    - vxflex

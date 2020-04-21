@@ -1,0 +1,85 @@
+---
+- name: "Open Ports for IPTables"
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+  with_items:
+  - 2377
+  - 7946
+  - 8080
+  - 80
+  - 443
+  - 50
+  - 2375
+  - 2376
+  - 22
+  - 2222
+  tags:
+    - swarm
+
+- name: "Open Ports IPTables for vxFlex"
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+  with_items:
+  - 6611
+  - 9011
+  - 7072
+  - 9099
+  - 8443
+  - 25620
+  - 25600
+  - 25640
+  tags:
+    - vxflex
+
+- name: "Open Ports for IPTables"
+  iptables:
+    chain: INPUT
+    protocol: udp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+  with_items:
+  - 7946
+  - 4789
+  tags:
+    - swarm
+
+- name: "Open Ports for IPTables for vxFlex"
+  iptables:
+    chain: INPUT
+    protocol: udp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+  with_items:
+  - 162
+  - 25620
+  - 25600
+  - 25640
+  tags:
+    - vxflex
+
+- name: "Change FORWARD chain to ACCEPT"
+  iptables:
+    chain: FORWARD
+    policy: ACCEPT
+  tags:
+    - swarm
+
+- name: "Save the IP table settings change for Ubuntu"
+  shell: service iptables save
+  become: true
+  tags:
+    - swarm
+
+- name: "Restart the iptables service"
+  service:
+    name: iptables
+    state: restarted
+    enabled: yes
+  tags:
+    - swarm

@@ -1,31 +1,74 @@
 - name: "See if node is already in a swarm"
   shell: "docker info | grep Swarm | sed 's/Swarm: //g' | tr -d '[:space:]' | xargs"
   register: swarm_state
+  tags:
+    - swarm
+
+- name: "printing swarm state"
+  debug:
+    var: swarm_state
+  tags:
+    - swarm
+
+- name: "printing inventory_hostname"
+  debug:
+    var: inventory_hostname
+  tags:
+    - swarm
 
 - name: "Determining if inventory has the IP or not"
   set_fact:
-    swarm_master: "{{ inventory_hostname }}"
-    when: "{{ inventory_hostname | ip_addr }}"
+    swarm_master: "{{ inventory_hostname if (inventory_hostname | ipaddr('bool')) else ansible_default_ipv4.address }}"
+  tags:
+    - swarm
 
-- name: "Determining if inventory has the IP or not"
-  set_fact:
-    swarm_master: "{{ ansible_default_ipv4.address }}"
-    when: not {{ inventory_hostname | ip_addr }}
+- name: "printing inventory_hostname"
+  debug:
+    var: swarm_master
+  tags:
+    - swarm
+
+#- name: "Determining if inventory has the IP or not"
+#  set_fact:
+#    swarm_master: "{{ ansible_default_ipv4.address }}"
+#    when: not inventory_hostname | ipaddr(bool)
+#  tags:
+#    - swarm
+#
+#- name: "printing inventory_hostname"
+#  debug:
+#    var: swarm_master
+#  tags:
+#    - swarm
+#
+#- name: "Swarm output"
+#  debug:
+#    var: swarm_state
+#  tags:
+#    - debug
 
 - name: "Initialize docker swarm instance and caputure ID"
   shell: "docker swarm init --advertise-addr {{ swarm_master }}"
   register: docker_id
   when: swarm_state.stdout == "inactive"
+  tags:
+    - swarm
 
 - name: "Display docker swarm token ID"
   shell: "docker swarm join-token manager | awk '{if(NR>1)print}'"
   register: docker_id_number
+  tags:
+    - swarm
 
 - name: "Add Token and to dummy host, used to pass variable to other playbook"
   add_host:
     name:   "MASTER_TOKEN_HOLDER"
     token:  "{{ docker_id_number.stdout }}"
+  tags:
+    - swarm
 
 - name: "Master Swarm IP"
   debug:
-    var: ansible_default_ipv4.address
+    var: swarm_master
+  tags:
+    - swarm

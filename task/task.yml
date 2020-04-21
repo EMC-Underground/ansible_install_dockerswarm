@@ -10,6 +10,14 @@ image_resource:
 inputs:
   - name: swarm_repo
 
+params:
+  vxflex_username: ((vxflex_username))
+  vxflex_password: ((vxflex_password))
+  vxflex_gateway_ip: ((vxflex_gateway_ip))
+  vxflex_gateway_port: ((vxflex_gateway_port))
+  vxflex_system_name: ((vxflex_system_name))
+  vxflex_protection_domain: ((vxflex_protection_domain))
+  vxflex_storage_pool: ((vxflex_storage_pool))
 run:
   path: bash
   args:
@@ -34,4 +42,7 @@ run:
     sed -i "/\[defaults\]/a host_key_checking = False" /etc/ansible/ansible.cfg
     mv vars.yml.example vars.yml
     ansible-galaxy install ericsysmin.chrony
-    ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --skip-tags 'vxflex' -u ((user_name))
+    pip install netaddr
+    pip install jmespath
+    echo ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --tags ((swarm_tags)) -u ((user_name))
+    ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --tags ((swarm_tags)) -u ((user_name))

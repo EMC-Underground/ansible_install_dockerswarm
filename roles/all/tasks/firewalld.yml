@@ -1,0 +1,9 @@
+---
+- name: "Disable Centos FireWalld Service"
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+    masked: yes
+  tags:
+    - swarm
