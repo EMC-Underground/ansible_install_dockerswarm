@@ -5,7 +5,7 @@
 - name: "Determining if inventory has the IP or not"
   set_fact:
     swarm_master: "{{ inventory_hostname }}"
-    when: {{ inventory_hostname | ip_addr }}
+    when: "{{ inventory_hostname | ip_addr }}"
 
 - name: "Determining if inventory has the IP or not"
   set_fact:
