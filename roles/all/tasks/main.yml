@@ -72,7 +72,6 @@
 - debug:
     var: ansible_facts['distribution']
 
-
 - name: "Check if UFW is installed"
   shell: command -v ufw
   register: ufw_firewall_check
@@ -99,7 +98,6 @@
     - iptables_firewall_check.rc != 1
   tags:
     - swarm
-
 
 - name: "Enable Firewalld and Open Ports for Docker Swarm"
   include_tasks: firewalld.yml
