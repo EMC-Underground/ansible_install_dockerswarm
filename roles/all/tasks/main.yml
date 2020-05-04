@@ -12,6 +12,7 @@
   - wget
   - net-tools
   - yum-utils
+  - nfs-utils
   - lvm2
   tags:
     - swarm
