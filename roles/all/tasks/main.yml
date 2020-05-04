@@ -41,6 +41,14 @@
   tags:
     - swarm
 
+- name: "Start and enable rpc-statd for NFS locking"
+  systemd:
+    name: rpc-statd
+    state: started
+    enabled: yes
+  tags:
+    - swarm
+
 
 - name: "Disable seLinux"
   selinux:
