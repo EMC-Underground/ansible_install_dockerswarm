@@ -42,6 +42,8 @@ run:
     sed -i "/\[defaults\]/a host_key_checking = False" /etc/ansible/ansible.cfg
     mv vars.yml.example vars.yml
     ansible-galaxy install ericsysmin.chrony
+    apt-get remove -y python3
+    apt-get install -y python3
     pip install netaddr
     pip install jmespath
     echo ansible-playbook playbook.yml -i hosts --extra-vars '{"ansible_ssh_pass": "((password))", "ntp_server": "((ntp_server))"}' --tags ((swarm_tags)) -u ((user_name))
