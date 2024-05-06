@@ -43,6 +43,7 @@ run:
     cat /etc/ansible/ansible.cfg
     mv vars.yml.example vars.yml
     ansible-galaxy install ericsysmin.chrony
+    apt-get update
     apt-get remove -y python3
     apt-get install -y python3
     pip install netaddr
