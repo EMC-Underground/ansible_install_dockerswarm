@@ -8,7 +8,7 @@
 
 - name: "Upgrade Kernel"
   yum:
-    name: http://mirror.rc.usf.edu/compute_lock/elrepo/kernel/el7/x86_64/RPMS/kernel-ml-4.10.5-1.el7.elrepo.x86_64.rpm
+    name: http://193.49.22.109/elrepo/kernel/el7/x86_64/RPMS/kernel-ml-4.10.5-1.el7.elrepo.x86_64.rpm
     state: present
     validate_certs: no
   tags:
