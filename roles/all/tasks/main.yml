@@ -210,7 +210,7 @@
 
 - name: "Install SDC"
   yum:
-    name: http://192.168.0.203:9090/api/v2/sec/share/449M3bCVAZf-npiaxvZVVSn-9fmCgggsp5q-SPVvTfkndyA/file/5YzEAXRfjA5-BXX3WWr5RGe-WtBrwNATzc9-iqcA14BdeL7
+    name: /EMC-ScaleIO-sdc-3.0-1100.113.el7.x86_64.rpm
     state: present
   environment:
     MDM_IP: "{{ MDMs | join(',') }}"
