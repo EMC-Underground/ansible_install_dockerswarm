@@ -1,6 +1,7 @@
 - name: "See if node is already in a swarm"
   shell: "docker info | grep Swarm | sed 's/Swarm: //g' | tr -d '[:space:]' | xargs"
   register: swarm_state
+  ignore_errors: true
   tags:
     - swarm
 
