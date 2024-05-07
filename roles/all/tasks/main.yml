@@ -212,7 +212,6 @@
   yum:
     name: /EMC-ScaleIO-sdc-3.0-1100.113.el7.x86_64.rpm
     state: present
-    install_weak_deps: false
   environment:
     MDM_IP: "{{ MDMs | join(',') }}"
   tags:
