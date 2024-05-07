@@ -40,7 +40,6 @@ run:
     done
     cat hosts
     sed -i "/\[defaults\]/a host_key_checking = False" /etc/ansible/ansible.cfg
-    cat /etc/ansible/ansible.cfg
     mv vars.yml.example vars.yml
     ansible-galaxy install ericsysmin.chrony
     pip install --force-reinstall "netaddr==0.8.0"
